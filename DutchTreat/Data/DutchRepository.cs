@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DutchTreat.Data.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace DutchTreatAdvanced.Data
 {
@@ -13,17 +14,30 @@ namespace DutchTreatAdvanced.Data
     public class DutchRepository : IDutchRepository
     {
         private readonly Dutchcontext _context;
+        private readonly ILogger<DutchRepository> _logger;
 
-        public DutchRepository(Dutchcontext context)
+        // ILogger - take it as a generic argument itself
+        // Logger will be tied to this type so when it emits data, we will be able to see where the logging came from 
+        public DutchRepository(Dutchcontext context, ILogger<DutchRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public IEnumerable<Product> GetProducts()
         {
-            return _context.Products
-                .OrderBy(x => x.Title)
-                .ToList();
+            try
+            {
+                _logger.LogInformation("GetProducts is called.");
+                return _context.Products
+                    .OrderBy(x => x.Title)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("GetProducts was called", e);
+                return null;
+            }
         }
 
         public IEnumerable<Product> GetProductsByCategory(string category)

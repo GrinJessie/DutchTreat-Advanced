@@ -1,5 +1,14 @@
 {
-	"ConnectionStrings": {
-    "DutchConnectionString":  "server=(localdb)\\ProjectsV13;Database=DutchTreatDb;Integrated Security=true;MultipleActiveResultSets=true;" 
-  } 
+  "ConnectionStrings": {
+    "DutchConnectionString": "server=(localdb)\\ProjectsV13;Database=DutchTreatDb;Integrated Security=true;MultipleActiveResultSets=true;"
+  },
+  "Logging": {
+    "LogLevel": {
+      /* For every logging starting with the word - DutchTreat - use warning */
+      "DutchTreat": "Information",
+      /* For every logging starting with the word - microsoft - use warning */
+      "Microsoft": "Warning"
+    } 
+  }
+
 }
