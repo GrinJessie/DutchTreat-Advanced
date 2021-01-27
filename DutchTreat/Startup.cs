@@ -29,11 +29,6 @@ namespace DutchTreat
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IMailService, NullMailService>();
-            // Support for real mail service
-
-            services.AddControllersWithViews();
-
             // "server=(localdb)\\ProjectsV13;Database=DutchTreatDb;Integrated Security=true;MultipleActiveResultSets=true;" 
             //server name can be checked in the view -> SQL server object explorer
             // Integrated Security can be replaced with real credential on deployment
@@ -41,8 +36,18 @@ namespace DutchTreat
             // SCOPED service
             services.AddDbContext<Dutchcontext>(configuration => configuration.UseSqlServer(_config.GetConnectionString("DutchConnectionString")));
 
+            services.AddTransient<IMailService, NullMailService>();
+            // Support for real mail service
+
             // Will be creatable through the dependance injection
             services.AddTransient<DutchSeeder>();
+
+            // Add IDutchRepository as a service people can use, but use as the implementation this version (DutchRepository)
+            // In testing, can use services.AddScoped<IDutchRepository, MockDutchRepository>();
+            services.AddScoped<IDutchRepository, DutchRepository>();
+
+            services.AddControllersWithViews();
+
 
         }
 
