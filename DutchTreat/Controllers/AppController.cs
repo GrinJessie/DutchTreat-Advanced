@@ -5,17 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using DutchTreat.Services;
 using DutchTreat.ViewModels;
+using DutchTreatAdvanced.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DutchTreat.Controllers
 {
   public class AppController : Controller
   {
     private readonly IMailService _mailService;
+    private readonly Dutchcontext _context;
 
-    public AppController(IMailService mailService)
+    public AppController(IMailService mailService, Dutchcontext context)
     {
       _mailService = mailService;
+      _context = context;
     }
 
     public IActionResult Index()
@@ -50,5 +54,12 @@ namespace DutchTreat.Controllers
       return View();
     }
 
+    public IActionResult Shop()
+    {
+        var results = _context.Products
+            .OrderBy(x => x.Category)
+            .ToList();
+        return View(results);
+    }
   }
 }
