@@ -23,5 +23,25 @@ namespace DutchTreatAdvanced.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modeldBuilder)
+        {
+            base.OnModelCreating(modeldBuilder);
+
+            modeldBuilder.Entity<Order>()
+                // Like SQL schema
+                // .Property(p => p.Title)
+                // .HasMaxLength(50);
+
+                // Works great for really simple cases
+                // For related data like adding the orderItems, then need to the way our model looks to make the relationship to happen
+                // Also got generated every time you new up a new DutchContext that can impact the run time performance
+                .HasData(new Order
+                {
+                    Id = 1,
+                    OrderDate = DateTime.UtcNow,
+                    OrderNumber = "123456"
+                });
+        }
+
     }
 }

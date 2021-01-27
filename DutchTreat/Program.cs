@@ -3,18 +3,44 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DutchTreatAdvanced.Data;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
+ 
 namespace DutchTreat
 {
   public class Program
   {
     public static void Main(string[] args)
     {
-      BuildWebHost(args).Run();
+        // let seeding happen way before building the web server
+        var host = BuildWebHost(args);
+
+        // Keep in main() to make sure that every time the web server is started, it will attempt to seed the database to make sure all the part the database required is there including running migration
+        // On start up only
+        // No need for ef commands
+        // Getting away from dropping DB and writing migrations
+        SeedDb(host);
+
+        BuildWebHost(args).Run();
+    }
+
+    private static void SeedDb(IWebHost host)
+    {
+        // A way outside of standard web server to create a scope
+        // During every request, it creates scope for the lifetime of the request
+        // Get an instance of the DutchContext object that is true through out the entire request
+        // But outside of that, there isn't a default scope unless we created one 
+        var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+
+        // Use using so the scope is closed once the work is done
+        using var scope = scopeFactory?.CreateScope();
+        // get the service within the context of the scope
+        var seeder = scope?.ServiceProvider.GetService<DutchSeeder>();
+        seeder?.Seed();
     }
 
     public static IWebHost BuildWebHost(string[] args) =>

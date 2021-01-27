@@ -38,7 +38,11 @@ namespace DutchTreat
             //server name can be checked in the view -> SQL server object explorer
             // Integrated Security can be replaced with real credential on deployment
             // MultipleActiveResultSets is an EF core special connection - retrieve multiple steams of data at the same time
+            // SCOPED service
             services.AddDbContext<Dutchcontext>(configuration => configuration.UseSqlServer(_config.GetConnectionString("DutchConnectionString")));
+
+            // Will be creatable through the dependance injection
+            services.AddTransient<DutchSeeder>();
 
         }
 
