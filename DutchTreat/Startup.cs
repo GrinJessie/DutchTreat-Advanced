@@ -46,7 +46,8 @@ namespace DutchTreat
             // In testing, can use services.AddScoped<IDutchRepository, MockDutchRepository>();
             services.AddScoped<IDutchRepository, DutchRepository>();
 
-            services.AddControllersWithViews();
+            // Some new features after 2.1 on API controller
+            services.AddControllersWithViews().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
 
         }
