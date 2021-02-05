@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DutchTreat.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DutchTreatAdvanced.Data
@@ -45,6 +46,19 @@ namespace DutchTreatAdvanced.Data
             return _context.Products
                 .Where(x => x.Category == category)
                 .ToList();
+        }
+
+        public IEnumerable<Order> GetOrders()
+        {
+            try
+            {
+                // EF core only return data on the level of the hierarchy back unless we add "include"
+                return _context.Orders.Include(o => o.Items).ToList();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public bool SaveAll()

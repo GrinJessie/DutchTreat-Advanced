@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace DutchTreat
 {
@@ -34,9 +35,12 @@ namespace DutchTreat
             // Integrated Security can be replaced with real credential on deployment
             // MultipleActiveResultSets is an EF core special connection - retrieve multiple steams of data at the same time
             // SCOPED service
-            services.AddDbContext<Dutchcontext>(configuration => configuration.UseSqlServer(_config.GetConnectionString("DutchConnectionString")));
+            services.AddDbContext<Dutchcontext>(configuration =>
+            {
+                configuration.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
+            }, ServiceLifetime.Transient);
 
-            services.AddTransient<IMailService, NullMailService>();
+                    services.AddTransient<IMailService, NullMailService>();
             // Support for real mail service
 
             // Will be creatable through the dependance injection
@@ -46,8 +50,11 @@ namespace DutchTreat
             // In testing, can use services.AddScoped<IDutchRepository, MockDutchRepository>();
             services.AddScoped<IDutchRepository, DutchRepository>();
 
-            // Some new features after 2.1 on API controller
-            services.AddControllersWithViews().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddControllersWithViews()
+                // Some new features after 2.1 on API controller
+                .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                // Error is the default; Serialize creates hugely deep nested object graph;  
+                .AddNewtonsoftJson(option => option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 
         }
