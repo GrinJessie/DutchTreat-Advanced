@@ -53,7 +53,25 @@ namespace DutchTreatAdvanced.Data
             try
             {
                 // EF core only return data on the level of the hierarchy back unless we add "include"
-                return _context.Orders.Include(o => o.Items).ToList();
+                 return _context.Orders
+                     .Include(o => o.Items)
+                     .ThenInclude(i => i.Product)
+                     .ToList();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public Order GetOrderById(int id)
+        {
+            try
+            {
+                return _context.Orders
+                    .Include(o => o.Items)
+                    .ThenInclude(o => o.Product)
+                    .FirstOrDefault(o => o.Id == id);
             }
             catch (Exception e)
             {

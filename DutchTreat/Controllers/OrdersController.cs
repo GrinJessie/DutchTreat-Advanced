@@ -34,5 +34,23 @@ namespace DutchTreatAdvanced.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("{id:int}")]
+        public ActionResult Get(int id)
+        {
+            try
+            {
+                var order = _repository.GetOrderById(id);
+                if (order != null) return Ok(order);
+                // Not found makes more sense than a bad request
+                else return NotFound();
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Fail to get orders: {e}");
+                return BadRequest();
+            }
+        }
     }
 }
