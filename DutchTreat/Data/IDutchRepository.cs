@@ -14,5 +14,7 @@ namespace DutchTreatAdvanced.Data
 
 
         bool SaveAll();
+
+        void AddEntity(object model);
     }
 }

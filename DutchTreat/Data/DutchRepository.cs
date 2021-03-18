@@ -83,5 +83,10 @@ namespace DutchTreatAdvanced.Data
         {
             return _context.SaveChanges() > 0;
         }
+
+        public void AddEntity(object model)
+        {
+            _context.Add(model);
+        }
     }
 }
