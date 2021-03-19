@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DutchTreat.Data.Entities;
 using DutchTreatAdvanced.Data;
 using DutchTreatAdvanced.ViewModels;
@@ -17,18 +18,21 @@ namespace DutchTreatAdvanced.Controllers
     {
         private readonly IDutchRepository _repository;
         private readonly ILogger<OrdersController> _logger;
+        private readonly IMapper _mapper;
 
-        public OrdersController(IDutchRepository repository, ILogger<OrdersController> logger)
+        public OrdersController(IDutchRepository repository, ILogger<OrdersController> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public IActionResult Get()
         {
             try
             {
-                return Ok(_repository.GetOrders());
+                var results = _repository.GetOrders();
+                return Ok(_mapper.Map<IEnumerable<OrderViewModel>>(results));
             }
             catch (Exception e)
             {
@@ -43,7 +47,7 @@ namespace DutchTreatAdvanced.Controllers
             try
             {
                 var order = _repository.GetOrderById(id);
-                if (order != null) return Ok(order);
+                if (order != null) return Ok(_mapper.Map<Order,OrderViewModel>(order));
                 // Not found makes more sense than a bad request
                 else return NotFound();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using DutchTreat.Services;
@@ -46,6 +47,8 @@ namespace DutchTreat
 
             // Will be creatable through the dependance injection
             services.AddTransient<DutchSeeder>();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             // Add IDutchRepository as a service people can use, but use as the implementation this version (DutchRepository)
             // In testing, can use services.AddScoped<IDutchRepository, MockDutchRepository>();
