@@ -68,12 +68,7 @@ namespace DutchTreatAdvanced.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var newOrder = new Order
-                {
-                    OrderDate = model.OrderDate,
-                    OrderNumber = model.OrderNumber,
-                    Id = model.OrderId
-                };
+                var newOrder = _mapper.Map<OrderViewModel, Order>(model);
 
                 if(newOrder.OrderDate == DateTime.MinValue)
                     newOrder.OrderDate = DateTime.Now;
@@ -82,12 +77,7 @@ namespace DutchTreatAdvanced.Controllers
                 _repository.AddEntity(newOrder);
                 if (_repository.SaveAll())
                 {
-                    var newModel = new OrderViewModel
-                    {
-                        OrderDate = newOrder.OrderDate,
-                        OrderId = newOrder.Id,
-                        OrderNumber = newOrder.OrderNumber
-                    };
+                    var newModel = _mapper.Map<Order, OrderViewModel>(newOrder);
 
                     // In HTTP, in a POST, if an object is created, it must return a "created"
                     // 201 instead of 200 for OK

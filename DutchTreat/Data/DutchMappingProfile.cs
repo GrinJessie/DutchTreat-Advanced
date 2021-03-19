@@ -17,7 +17,9 @@ namespace DutchTreatAdvanced.Data
             CreateMap<Order, OrderViewModel>()
                 // when property names don't match
                 // provide the source destination relationship
-                .ForMember( o => o.OrderId, ex => ex.MapFrom(o => o.Id));
+                .ForMember( o => o.OrderId, ex => ex.MapFrom(o => o.Id))
+                // support mapping above in the opposite order
+                .ReverseMap();
         }
     }
 }
