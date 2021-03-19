@@ -32,6 +32,8 @@ namespace DutchTreatAdvanced.Controllers
             try
             {
                 var results = _repository.GetOrders();
+                // only need to call map at the top level, autoMapper will walk down to children and map the best it can
+                // however, children mapping definition are required
                 return Ok(_mapper.Map<IEnumerable<OrderViewModel>>(results));
             }
             catch (Exception e)
