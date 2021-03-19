@@ -48,15 +48,23 @@ namespace DutchTreatAdvanced.Data
                 .ToList();
         }
 
-        public IEnumerable<Order> GetOrders()
+        public IEnumerable<Order> GetOrders(bool includeItems)
         {
             try
             {
-                // EF core only return data on the level of the hierarchy back unless we add "include"
-                 return _context.Orders
-                     .Include(o => o.Items)
-                     .ThenInclude(i => i.Product)
-                     .ToList();
+                if (includeItems)
+                {
+                    // EF core only return data on the level of the hierarchy back unless we add "include"
+                    return _context.Orders
+                        .Include(o => o.Items)
+                        .ThenInclude(i => i.Product)
+                        .ToList();
+                }
+                else
+                {
+                    return _context.Orders.ToList();
+                }
+
             }
             catch (Exception e)
             {

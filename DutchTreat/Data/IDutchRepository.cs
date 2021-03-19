@@ -9,7 +9,7 @@ namespace DutchTreatAdvanced.Data
         IEnumerable<Product> GetProducts();
         IEnumerable<Product> GetProductsByCategory(string category);
 
-        IEnumerable<Order> GetOrders();
+        IEnumerable<Order> GetOrders(bool includeItems);
         Order GetOrderById(int id);
 
 

@@ -27,11 +27,14 @@ namespace DutchTreatAdvanced.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Get()
+        // always set a default value for query strings so don't need to include it in every case
+        // By using optional parameter, we can combine two endpoints together :
+        // Get(bool includeItems) & Get()
+        public IActionResult Get(bool includeItems = true)
         {
             try
             {
-                var results = _repository.GetOrders();
+                var results = _repository.GetOrders(includeItems);
                 // only need to call map at the top level, autoMapper will walk down to children and map the best it can
                 // however, children mapping definition are required
                 return Ok(_mapper.Map<IEnumerable<OrderViewModel>>(results));
