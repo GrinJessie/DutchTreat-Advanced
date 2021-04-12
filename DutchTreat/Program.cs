@@ -40,7 +40,8 @@ namespace DutchTreat
         using var scope = scopeFactory?.CreateScope();
         // get the service within the context of the scope
         var seeder = scope?.ServiceProvider.GetService<DutchSeeder>();
-        seeder?.Seed();
+        // Since it's a one time async operation, wait for it synchronously instead of changing the method and class async
+        seeder?.SeedAsync().Wait();
     }
 
     public static IWebHost BuildWebHost(string[] args) =>

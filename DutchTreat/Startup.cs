@@ -6,9 +6,11 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using DutchTreat.Services;
 using DutchTreatAdvanced.Data;
+using DutchTreatAdvanced.Data.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -47,6 +49,10 @@ namespace DutchTreat
 
             // Will be creatable through the dependance injection
             services.AddTransient<DutchSeeder>();
+
+            services.AddIdentity<StoreUser, IdentityRole>()
+                .AddEntityFrameworkStores<Dutchcontext>()
+                .AddDefaultTokenProviders();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

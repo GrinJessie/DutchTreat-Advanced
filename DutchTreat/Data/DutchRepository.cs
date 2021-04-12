@@ -68,6 +68,7 @@ namespace DutchTreatAdvanced.Data
             }
             catch (Exception e)
             {
+                _logger.LogError("Failed to get orders.", e);
                 return null;
             }
         }
@@ -83,6 +84,7 @@ namespace DutchTreatAdvanced.Data
             }
             catch (Exception e)
             {
+                _logger.LogError("Failed to get order by Id", e);
                 return null;
             }
         }
